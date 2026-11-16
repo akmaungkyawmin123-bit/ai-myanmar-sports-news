@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Myanmar Sports News Studio</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#0b1020;color:#fff;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:22px;background:#121a30;
+ border-bottom:1px solid #26334d;
+}
+header h2{margin:0;color:#38d9a9}
+header p{color:#9eacc5;font-size:13px}
+.container{padding:20px;max-width:1100px;margin:auto}
+.hero{
+ background:linear-gradient(120deg,#153c4b,#20234c);
+ padding:25px;border-radius:16px;margin-bottom:22px;
+}
+.hero h1{font-size:26px}
+.hero p{color:#c3d3e5}
+.stats{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:12px;margin:20px 0;
+}
+.stat{
+ background:#151e33;padding:18px;border-radius:12px;
+ border:1px solid #26334d;
+}
+.stat h2{color:#38d9a9;margin:0}
+.stat p{color:#a9b6ca;font-size:13px}
+button{
+ background:#38d9a9;color:#08131b;
+ border:0;padding:11px 17px;border-radius:8px;
+ font-weight:bold;cursor:pointer;
+}
+input{
+ width:100%;padding:13px;border-radius:9px;
+ border:1px solid #34435d;background:#151e33;
+ color:white;margin:12px 0;
+}
+.categories{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.categories button{background:#26334d;color:white}
+.categories button.active{background:#38d9a9;color:#08131b}
+.news{
+ background:#151e33;padding:18px;
+ border-radius:12px;margin:12px 0;
+ border:1px solid #26334d;
+}
+.news small{color:#38d9a9}
+.news p{color:#a9b6ca;line-height:1.6}
+.section-title{margin-top:28px}
+footer{text-align:center;padding:25px;color:#8795aa}
+@media(min-width:650px){
+ .stats{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <h2>⚡ AI MYANMAR SPORTS</h2>
+ <p>AI Powered Sports News Studio</p>
+</header>
+
+<div class="container">
+
+ <section class="hero">
+  <h1>Sports News Dashboard</h1>
+  <p>အားကစားသတင်းများကို AI ဖြင့် ဖန်တီး၊
+  မြန်မာဘာသာပြန်ပြီး Video Content ထုတ်လုပ်ပါ။</p>
+  <button onclick="alert('News Automation ကို Backend ချိတ်ဆက်ပြီးမှ အသုံးပြုနိုင်ပါမည်။')">
+  + Create News
+  </button>
+ </section>
+
+ <div class="stats">
+  <div class="stat">
+   <h2 id="total">0</h2>
+   <p>Total News</p>
+  </div>
+  <div class="stat">
+   <h2>AI</h2>
+   <p>News Writer</p>
+  </div>
+  <div class="stat">
+   <h2>MM</h2>
+   <p>Burmese Translation</p>
+  </div>
+  <div class="stat">
+   <h2>HD</h2>
+   <p>Video Studio</p>
+  </div>
+ </div>
+
+ <h3 class="section-title">📰 Sports News Center</h3>
+
+ <input id="search" placeholder="သတင်းများ ရှာဖွေရန်..."
+ oninput="render()">
+
+ <div class="categories">
+  <button class="active" onclick="filterNews('All',this)">All</button>
+  <button onclick="filterNews('Football',this)">Football</button>
+  <button onclick="filterNews('MMA',this)">MMA / UFC</button>
+  <button onclick="filterNews('Basketball',this)">Basketball</button>
+ </div>
+
+ <div id="newsList"></div>
+
+ <h3 class="section-title">🤖 AI Content Studio</h3>
+
+ <div class="news">
+  <h3>AI News Writer</h3>
+  <p>အားကစားသတင်း Script များ ဖန်တီးရန်</p>
+  <button onclick="alert('Gemini API ချိတ်ဆက်ပြီးမှ အသုံးပြုနိုင်ပါမည်။')">Open Writer</button>
+ </div>
+
+ <div class="news">
+  <h3>🎙️ AI Voice Generator</h3>
+  <p>မြန်မာဘာသာဖြင့် အသံဖိုင်ထုတ်လုပ်ရန်</p>
+  <button onclick="alert('ElevenLabs API ချိတ်ဆက်ရန် လိုအပ်ပါသည်။')">Generate Voice</button>
+ </div>
+
+ <div class="news">
+  <h3>🎬 Video Studio</h3>
+  <p>YouTube Shorts နှင့် Long Video Content များ ပြုလုပ်ရန်</p>
+  <button onclick="alert('Video Studio ကို နောက်အဆင့်တွင် တည်ဆောက်ပါမည်။')">Open Studio</button>
+ </div>
+
+</div>
+
+<footer>
+ AI Myanmar Sports News Studio © 2026
+</footer>
+
+<script>
+const news = [
+ {type:"Football",title:"Football News Center",desc:"Football သတင်းများကို ဤနေရာတွင် ပြသပါမည်။"},
+ {type:"MMA",title:"MMA & UFC News Center",desc:"UFC နှင့် MMA သတင်းများကို ဤနေရာတွင် ပြသပါမည်။"},
+ {type:"Basketball",title:"Basketball News Center",desc:"Basketball သတင်းများကို ဤနေရာတွင် ပြသပါမည်။"}
+];
+
+let category="All";
+
+function filterNews(type,btn){
+ category=type;
+ document.querySelectorAll(".categories button")
+ .forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ render();
+}
+
+function render(){
+ const query=document.getElementById("search").value.toLowerCase();
+ const filtered=news.filter(n=>
+ (category==="All"||n.type===category)&&
+ (n.title.toLowerCase().includes(query)||
+ n.desc.toLowerCase().includes(query))
+ );
+ document.getElementById("total").textContent=news.length;
+ document.getElementById("newsList").innerHTML=
+ filtered.map(n=>`
+ <div class="news">
+ <small>${n.type}</small>
+ <h3>${n.title}</h3>
+ <p>${n.desc}</p>
+ </div>`).join("")||"<p>No news found.</p>";
+}
+render();
+</script>
+
+</body>
+</html>
